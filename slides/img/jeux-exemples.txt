@@ -1,0 +1,22 @@
+[Du moins bon au meilleur]
+
+https://www.openprocessing.org/sketch/29317/
+- Pas de feedback
+- Pas d'animations
+- Pas de sons
+- Menu bordel
+
+http://maciejkus.com/tower/
+- Pas de grille
+- Pas de son
+- Pas de feedback
++ Projectiles
++ Orientation des tourelles
++ Niveau de vie
+
+https://haxeflixel.com/demos/MinimalistTD/
++ Musique
++ Sons
++ Feedbacks
++ Facilité d'utilisation
++ Difficultés avec prix des tourelles
