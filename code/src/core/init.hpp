@@ -11,11 +11,9 @@
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "core/gl-log-handler.hpp"
 
-/* Dimensions initiales et titre de la fenetre */
-static const unsigned int WINDOW_WIDTH = 800;
-static const unsigned int WINDOW_HEIGHT = 600;
+#include "core/gl-log-handler.hpp"
+#include "core/constants.hpp"
 
 namespace imac {
 SDL_Window* init() {

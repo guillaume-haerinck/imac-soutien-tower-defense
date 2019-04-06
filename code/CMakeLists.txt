@@ -8,7 +8,7 @@ file(
     GLOB_RECURSE 
     MY_SOURCES 
     src/core/*
-    src/tutos/1-entity/* # < ---------------------------------------------- UPDATE ME !
+    src/tutos/2-map/* # < ---------------------------------------------- UPDATE ME !
 )
 
 # ---------------------------------------- FIND DEPENDENCIES
