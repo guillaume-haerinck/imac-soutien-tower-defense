@@ -57,13 +57,20 @@ int main(int argc, char **argv) {
                     printf("clic en (%d, %d)\n", e.button.x, e.button.y);
                     {
                         /* Création d'une nouvelle entité au clic. Transformation des coordonées de SDL en coordonées normalisées pour OpenGL */
-                        Entity* myNewEntity = new Entity(e.button.x, e.button.y);
+                        Entity* myNewEntity = new Entity((float) e.button.x, (float) e.button.y);
                         entities.push_back(myNewEntity);
                     }
                     break;
 
                 case SDL_KEYDOWN:
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
+                    if (entities.size() > 0) {
+                        /* Delete the last entity on the list */
+                        Entity* myEntityToDelete = entities.at(entities.size() - 1);
+                        delete myEntityToDelete;
+                        entities.erase(entities.end() - 1);
+                    }
+                        
                     break;
 
                 default:
