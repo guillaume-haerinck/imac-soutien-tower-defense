@@ -22,6 +22,11 @@ int main(int argc, char **argv) {
         debug_break();
     }
 
+    // Passage des coordonnées normalisés d'OpenGL aux coordonées de la fenetre (0,0) est maintenant en haut à gauche
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h, 0);
+
     /* Creation d'une entité au runtime */
     Entity* myEntity1 = new Entity(0.0f, 0.0f);
 
@@ -51,8 +56,8 @@ int main(int argc, char **argv) {
                 case SDL_MOUSEBUTTONUP:
                     printf("clic en (%d, %d)\n", e.button.x, e.button.y);
                     {
-                        /* Création d'une nouvelle entité au clic */
-                        Entity* myNewEntity = new Entity(0.5f, 0.5f);
+                        /* Création d'une nouvelle entité au clic. Transformation des coordonées de SDL en coordonées normalisées pour OpenGL */
+                        Entity* myNewEntity = new Entity(e.button.x, e.button.y);
                         entities.push_back(myNewEntity);
                     }
                     break;
