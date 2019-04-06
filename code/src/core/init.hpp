@@ -18,14 +18,12 @@ static const unsigned int WINDOW_WIDTH = 800;
 static const unsigned int WINDOW_HEIGHT = 600;
 
 namespace imac {
-SDL_Window* init()
-{
+SDL_Window* init() {
     /* Init logger */
     spdlog::set_pattern("[%l] %^ %v %$");
     
     /* Init SDL */
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
         spdlog::critical("[SDL2] Unable to initialize SDL: {}", SDL_GetError());
         debug_break();
         return nullptr;
@@ -48,8 +46,7 @@ SDL_Window* init()
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         WINDOW_WIDTH, WINDOW_HEIGHT,
         SDL_WINDOW_OPENGL);
-    if (window == nullptr)
-    {
+    if (window == nullptr) {
         spdlog::critical("[SDL2] Window is null: {}", SDL_GetError());
         debug_break();
         return nullptr;
@@ -57,16 +54,14 @@ SDL_Window* init()
 
     /* Create OpenGl context */
     SDL_GLContext context = SDL_GL_CreateContext(window);
-    if (context == nullptr)
-    {
+    if (context == nullptr) {
         spdlog::critical("[SDL2] OpenGL context is null: {}", SDL_GetError());
         debug_break();
         return nullptr;
     }
 
     /* Init Glad once the OpenGL context is valid */
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-    {
+    if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
         spdlog::critical("[Glad] Glad not init");
         debug_break();
         return nullptr;

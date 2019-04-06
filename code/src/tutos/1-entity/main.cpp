@@ -11,51 +11,52 @@
 
 #include "core/gl-log-handler.hpp"
 #include "core/init.hpp"
+#include "entity.hpp"
 
-/* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 int main(int argc, char **argv) {
-    /* Init SDL, OpenGL, Debug and Glad */
     SDL_Window* window = imac::init();
     if (window == nullptr) {
         spdlog::critical("[INIT] Init not achieved !");
         debug_break();
     }
 
-    /* Boucle d'affichage */
+    /* Creation d'une entité au runtime */
+    Entity* myEntity1 = new Entity(0.0f, 0.0f);
+
+    /* Tableau dynamique des entités vivantes du jeu */
+    std::vector<Entity*> entities;
+    entities.push_back(myEntity1);
+
     bool loop = true;
     while (loop) {
-        /* Recuperation du temps au debut de la boucle */
         Uint32 startTime = SDL_GetTicks();
-
-        /* Vide l'image */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /* ------------- DESSINER ICI ---------------- */
+        /* Update des entités */
+        for (Entity* entity : entities) {
+            entity->update();
+        }
 
-        /* Echange du front et du back buffer : mise a jour de la fenetre */
         SDL_GL_SwapWindow(window);
-
-        /* Boucle traitant les evenements */
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            /* L'utilisateur ferme la fenetre : */
-            if (e.type == SDL_QUIT)
-            {
+            if (e.type == SDL_QUIT) {
                 loop = false;
                 break;
             }
 
-            /* Quelques exemples de traitement d'evenements : */
-            switch (e.type)
-            {
-                /* Clic souris */
+            switch (e.type) {
                 case SDL_MOUSEBUTTONUP:
                     printf("clic en (%d, %d)\n", e.button.x, e.button.y);
+                    {
+                        /* Création d'une nouvelle entité au clic */
+                        Entity* myNewEntity = new Entity(0.5f, 0.5f);
+                        entities.push_back(myNewEntity);
+                    }
                     break;
 
-                /* Touche clavier */
                 case SDL_KEYDOWN:
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
                     break;
@@ -65,17 +66,18 @@ int main(int argc, char **argv) {
             }
         }
 
-        /* Calcul du temps ecoule */
         Uint32 elapsedTime = SDL_GetTicks() - startTime;
-        /* Si trop peu de temps s'est ecoule, on met en pause le programme */
         if (elapsedTime < FRAMERATE_MILLISECONDS) {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
     }
 
-    /* Liberation des ressources associees a la SDL */
+    /* Cleanup */
     SDL_DestroyWindow(window);
     SDL_Quit();
+    for (Entity* entity : entities) {
+        delete entity;
+    }
 
     return EXIT_SUCCESS;
 }
