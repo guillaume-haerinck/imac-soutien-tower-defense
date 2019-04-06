@@ -35,13 +35,31 @@ int main(int argc, char **argv) {
     entities.push_back(myEntity1);
 
     bool loop = true;
+    unsigned int loopCount = 0;
+    bool prepareWave = false;
     while (loop) {
+        loopCount++;
         Uint32 startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
 
         /* Update des entités */
         for (Entity* entity : entities) {
             entity->update();
+        }
+
+        /* Création de 2 entités toutes les 3 secondes */
+        if (loopCount == 60 * 1 && prepareWave) {
+            printf("1 seconde...\n");
+        } else if (loopCount == 60 * 2 && prepareWave) {
+            printf("2 secondes ...\n");
+        } else if (loopCount == 60 * 3 && prepareWave) {
+            printf("3 secondes ecoulees\n");
+            Entity* myNewEntity = new Entity(50., 50.);
+            Entity* myNewEntity2 = new Entity(60., 60.);
+            entities.push_back(myNewEntity);
+            entities.push_back(myNewEntity2);
+            loopCount = 0;
+            prepareWave = false;
         }
 
         SDL_GL_SwapWindow(window);
@@ -64,13 +82,18 @@ int main(int argc, char **argv) {
 
                 case SDL_KEYDOWN:
                     printf("touche pressee (code = %d)\n", e.key.keysym.sym);
-                    if (entities.size() > 0) {
+                    if (entities.size() > 0 && e.key.keysym.sym == 'd') {
                         /* Delete the last entity on the list */
                         Entity* myEntityToDelete = entities.at(entities.size() - 1);
                         delete myEntityToDelete;
                         entities.erase(entities.end() - 1);
                     }
-                        
+
+                    if (e.key.keysym.sym == 'w') {
+                        printf("New wave in 3 seconds\n");
+                        prepareWave = true;
+                        loopCount = 0;
+                    }
                     break;
 
                 default:
