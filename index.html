@@ -38,7 +38,7 @@
 			<section>
 				<h3>Programme</h3>
 				<ol>
-					<li>Théorie du jeu & Archi. logicielle <small>(25')</small></li>
+					<li>Théorie du jeu & Archi. logicielle <small>(20')</small></li>
 					<br>
 					<li>Codage des tuto 1 & 2 <small>(1h)</small></li>
 					<br>
@@ -47,8 +47,12 @@
 			</section>
 
 			<section>
+				<h2>Partie 1 - Ça théorise dur</h3>
+			</section>
+
+			<section>
 				<section>
-					<h3>I - Comment développer jeu ?</h3>
+					<h3>I - Comment développer un jeu ?</h3>
 					<ul>
 						<li class='fragment'>Avoir un but</li>
 						<small class='fragment'>Au hasard : "défendre sa base contre des vagues d'ennemis"</small>
@@ -75,6 +79,20 @@
 						<img src="slides/img/pacman-rules.jpg">
 					</div>
 					<small>(Ça se fait progressivement en jouant au prototype)</small>
+				</section>
+
+				<section>
+					<h3>Exo bonus: Remplir un GDD</h3>
+					<p>Pourquoi un <a target="_blank" href="slides/assets/one-page-gdd.pdf">"Game Design Document"</a> ?</p>
+					<ul>
+						<li class='fragment'>Savoir quoi faire</li>
+						<li class='fragment'>Identifier les problèmes</li>
+						<li class='fragment'>Suivre les changements</li>
+					</ul>
+
+					<br>
+					<br>
+					<p class='fragment'><small>Pour les plus curieux sur la théorie du jeu, la référence c'est : <br><a target="_blank" href="https://www.amazon.fr/dp/B00OYUO4PY/ref=dp-kindle-redirect?_encoding=UTF8&btkr=1">"The Art of Game Design: A Book of Lenses" par Jesse Schell</a></small></p>
 				</section>
 			</section>
 
@@ -154,22 +172,168 @@
 
 				<section>
 					<p>Au final, ce qu'il nous reste à découvrir, c'est le gameplay et le principe de systèmes</p>
+					<small>(Et si vous voulez plus d'info, go checker <a target="_blank" href="https://www.gameenginebook.com/">"Game engine architecture" par Jason Gregory</a> )</small>
 				</section>
 			</section>
 
 			<section>
 				<section>
-					<h3>III - Structure du projet tower defense</h3>
+					<h3>III - Besoins du projet tower defense</h3>
+					<p>On les liste par éléments</p>
+
+					<table>
+						<tbody>
+							<tr>
+								<td class='fragment'>Tours</td>
+								<td class='fragment'>
+									<small>Tirer;</small>
+									<small>Affichage;</small>
+									<small>Cercle d'attaque;</small>
+									<small>Position;</small>
+									<small>Animation;</small>
+									<small>Stats;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Monstres</td>
+								<td class='fragment'>
+									<small>Déplacement;</small>
+									<small>Pathfinding;</small>
+									<small>Animation;</small>
+									<small>Stats;</small>
+									<small>Affichage;</small>
+									<small>Position;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Carte</td>
+								<td class='fragment'>
+									<small>Affichage;</small>
+									<small>Grille;</small>
+									<small>Charger .itd;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Jeu</td>
+								<td class='fragment'>
+									<small>Vagues;</small>
+									<small>Boutique;</small>
+									<small>Améliorations;</small>
+									<small>Construction;</small>
+									<small>Interfaces;</small>
+									<small>Inputs;</small>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<p>On abstrait pour éviter les répétitions</p>
+					<table>
+						<tbody>
+							<tr>
+								<td class='fragment'>Entités</td>
+								<td class='fragment'>
+									<small>Affichage;</small>
+									<small>Position;</small>
+									<small>Animation;</small>
+									<small>Stats;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Tours</td>
+								<td class='fragment'>
+									<small>Tirer;</small>
+									<small>Cercle d'attaque;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Monstres</td>
+								<td class='fragment'>
+									<small>Déplacement;</small>
+									<small>Pathfinding;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Carte</td>
+								<td class='fragment'>
+									<small>Grille;</small>
+									<small>Charger .itd;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Jeu</td>
+								<td class='fragment'>
+									<small>Interfaces;</small>
+									<small>Inputs;</small>
+								</td>
+							</tr>
+							<tr>
+								<td class='fragment'>Subsystems</td>
+								<td class='fragment'>
+									<small>Vagues;</small>
+									<small>Boutique;</small>
+									<small>Améliorations;</small>
+									<small>Construction;</small>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-1.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-2.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-3.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-4.png" data-background-size="contain">
+				</section>
+
+				<section>
+					<img src="slides/img/stop.jpg" style="height: 200px;">
+					<p>Pas la peine d'aller plus loin pour le moment : <br><br><small>Avec cette base, on peut répondre de façon simple à beaucoup de problèmes<br>(système de constructions, vagues, structure logicielle, ...)</small></p>
+					<h3 class='fragment'>ITS TIME TO CODE SOME SHIT</h3>
+					<small class='fragment'>(Mais pour les plus curieux...)</small>
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-4-blank.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-5.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-6.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-7.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-8.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/ITD-architecture-9.png" data-background-size="contain">
 				</section>
 			</section>
 
 			<section>
-				<section>
-					<p>Sous-section</p>
-				</section>
+				<h2>Partie 2 - Codage des tutos</h3>
+			</section>
 
+			<section>
+				<h3>Mise en route</h3>
+				<p>Ouvrez le dossier <i>'code'</i> avec un éditeur de texte. Puis suivez le 'readme.md'</p>
+				<small>(Déja, soyez sûr d'avoir <a href="https://cmake.org/">cmake</a>)</small>
+			</section>
+
+			<section>
 				<section>
-					<h3>Ma section</h3>
+					<h3>I - Entity</h3>
+					<p>On vas créer une nouvelle classe entité</p>
 					<pre><code data-trim data-noescape>
 						#include "test"
 
