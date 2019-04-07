@@ -493,10 +493,11 @@
 					<pre class='fragment'><code data-trim data-noescape>
 					#pragma once
 
-					#include "vector"
-					#include "glm/glm.hpp"
+					#include &ltvector&gt
+					#include &ltglm/glm.hpp&gt
+					#include "core/debug-draw.hpp"
 					
-					enum mapTile { constructible = 0, path = 1, locked = 2 };
+					enum class MapTile { constructible = 0, path = 1, locked = 2 };
 					
 					class Map {
 					public:
@@ -505,28 +506,40 @@
 					
 						glm::vec2 windowToGrid(float x, float y);
 						glm::vec2 gridToWindow(unsigned int x, unsigned int y);
-						mapTile getTile(unsigned int x, unsigned int y);
+						MapTile getTile(unsigned int x, unsigned int y);
 					
 						void draw();
 					
 					private:
-						std::vector<mapTile> m_grid;
+						std::vector&ltMapTile&gt m_grid;
 						unsigned int m_tileSize;
 						unsigned int m_gridWidth;
 						unsigned int m_gridHeight;
-					};							
+						DebugDraw m_dd;
+					};											
 					</code></pre>
 				</section>
 				
 				<section>
-					<p>La difficulté réside dans la transformation des coordonnées</p>
+					<p>Et on vas afficher le quadrillage</p>
 					<pre class='fragment'><code data-trim data-noescape>
-						Map::Map() : m_tileSize(100)
-						{
-							m_gridWidth = WINDOW_WIDTH / m_tileSize;
-							m_gridHeight = WINDOW_HEIGHT / m_tileSize;
-						}
+						void Map::draw() {
+							for (int x = m_tileSize; x &lt WINDOW_WIDTH; x++) {
+								m_dd.DrawSegment(b2Vec2(x, 0), b2Vec2(x, WINDOW_HEIGHT), b2Color(255, 0, 0, 1));
+								x += m_tileSize;
+							}
 						
+							for (int y = m_tileSize; y &lt WINDOW_HEIGHT; y++) {
+								m_dd.DrawSegment(b2Vec2(0, y), b2Vec2(WINDOW_WIDTH, y), b2Color(255, 0, 0, 1));
+								y += m_tileSize;
+							}
+						}				
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Maintenant le plus fun:<br>Passage entre les systèmes de coordonées<br><small>(Pour l'explication, c'est <a target="_blank" href="https://stackoverflow.com/questions/5731863/mapping-a-numeric-range-onto-another">ici</a>)</small></p>
+					<pre class='fragment'><code data-trim data-noescape>
 						glm::vec2 Map::windowToGrid(float x, float y) {
 							unsigned int tileX = x / WINDOW_WIDTH * m_gridWidth;
 							unsigned int tileY = y / WINDOW_HEIGHT * m_gridHeight;
@@ -534,11 +547,69 @@
 						}
 						
 						glm::vec2 Map::gridToWindow(unsigned int x, unsigned int y) {
-							float posX = x / m_gridWidth * WINDOW_WIDTH + m_tileSize / 2;
-							float posY = y / m_gridHeight * WINDOW_HEIGHT + m_tileSize / 2;
+							float posX = WINDOW_WIDTH / m_gridWidth * x + m_tileSize / 2;
+							float posY = WINDOW_HEIGHT / m_gridHeight * y + m_tileSize / 2;
 							return glm::vec2(posX, posY);
-						}						
+						}
+						
+						MapTile Map::getTile(unsigned int x, unsigned int y) {
+							return m_grid.at(y * m_gridHeight + x);
+						}				
 					</code></pre>
+				</section>
+
+				<section>
+					<p>On peut maintenant remplir la grille</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						Map::Map() {
+							(...)
+
+							m_grid.resize(m_gridWidth * m_gridHeight);
+
+							for (int i = 0; i < m_grid.size(); i++) {
+								if (i % 2 == 0) {
+									m_grid[i] = MapTile::constructible;
+								} else {
+									m_grid[i] = MapTile::locked;
+								}
+							}
+						}
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Et la checker en jeu</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						case SDL_MOUSEBUTTONUP:
+						{
+							glm::vec2 gridPos = level1.windowToGrid((float) e.button.x, (float) e.button.y);
+							spdlog::info("Grid x: {} y: {}", gridPos.x, gridPos.y);
+
+							MapTile tile = level1.getTile(gridPos.x, gridPos.y);
+							if (tile == MapTile::constructible) {
+								glm::vec2 winPos = level1.gridToWindow(gridPos.x, gridPos.y);
+								Entity* myNewEntity = new Entity(winPos.x, winPos.y);
+								entities.push_back(myNewEntity);
+							} else {
+								spdlog::warn("I can't construct here");
+							}
+						}
+						break;
+					</code></pre>
+				</section>
+
+				<section>
+					<p>On peut donc :</p>
+					<ul>
+						<li class="fragment">Ajouter et supprimer des entités au runtime</li>
+						<li class="fragment">Contruire sur la grille</li>
+						<li class="fragment">Interdire de construire sur des tiles</li>
+						<li class="fragment">Créer des entités selon un chrono</li>
+					</ul>
+					<p class="fragment">Y'a encore de quoi faire, mais avec ça vous êtes lancés !</p>
+				</section>
+
+				<section data-background-image="slides/img/you-got-it.gif">
 				</section>
 			</section>
 
@@ -554,9 +625,11 @@
 			<section>
 				<section>
 					<h3>I - Game Feel</h3>
-					<p>C'est l'heure du dddduel</p>
+					<div>
+						<img src="slides/img/yu-gi-yo.gif">
+					</div>
 	
-					<ul>
+					<ul class="fragment">
 						<li><a target="_blank" href="https://www.openprocessing.org/sketch/29317/">Processing Tower Defense Game</a></li>
 						<li><a target="_blank" href="https://haxeflixel.com/demos/MinimalistTD/">Haxe minimalistTD</a></li>
 						<li><a target="_blank" href="http://maciejkus.com/tower/">Maceiejkus tower</a></li>
