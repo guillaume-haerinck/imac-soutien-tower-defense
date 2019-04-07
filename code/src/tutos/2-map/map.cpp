@@ -8,6 +8,15 @@ Map::Map() : m_tileSize(50)
 {
     m_gridWidth = WINDOW_WIDTH / m_tileSize;
     m_gridHeight = WINDOW_HEIGHT / m_tileSize;
+    m_grid.resize(m_gridWidth * m_gridHeight);
+
+    for (int i = 0; i < m_grid.size(); i++) {
+        if (i % 2 == 0) {
+            m_grid[i] = MapTile::constructible;
+        } else {
+            m_grid[i] = MapTile::locked;
+        }
+    }
 }
 
 Map::~Map()
@@ -21,9 +30,13 @@ glm::vec2 Map::windowToGrid(float x, float y) {
 }
 
 glm::vec2 Map::gridToWindow(unsigned int x, unsigned int y) {
-    float posX = x / m_gridWidth * WINDOW_WIDTH + m_tileSize / 2;
-    float posY = y / m_gridHeight * WINDOW_HEIGHT + m_tileSize / 2;
+    float posX = WINDOW_WIDTH / m_gridWidth * x + m_tileSize / 2;
+    float posY = WINDOW_HEIGHT / m_gridHeight * y + m_tileSize / 2;
     return glm::vec2(posX, posY);
+}
+
+MapTile Map::getTile(unsigned int x, unsigned int y) {
+    return m_grid.at(y * m_gridHeight + x);
 }
 
 void Map::draw() {
@@ -36,12 +49,4 @@ void Map::draw() {
         m_dd.DrawSegment(b2Vec2(0, y), b2Vec2(WINDOW_WIDTH, y), b2Color(255, 0, 0, 1));
         y += m_tileSize;
     }
-    /*
-    glColor4f(255, 0, 0, 1);
-    glPointSize(5.0f);
-    glBegin(GL_POINTS);
-        glVertex2f(m_x, m_y);
-    glEnd();
-    glPointSize(1.0f);
-    */
 }

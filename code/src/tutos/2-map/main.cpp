@@ -54,9 +54,20 @@ int main(int argc, char **argv) {
 
             switch (e.type) {
                 case SDL_MOUSEBUTTONUP:
-                    printf("clic en (%d, %d)\n", e.button.x, e.button.y);
-                    glm::vec2 pos = level1.windowToGrid((float) e.button.x, (float) e.button.y);
-                    spdlog::info("Grid x: {} y: {}", pos.x, pos.y);
+                    {
+                        printf("clic en (%d, %d)\n", e.button.x, e.button.y);
+                        glm::vec2 gridPos = level1.windowToGrid((float) e.button.x, (float) e.button.y);
+                        spdlog::info("Grid x: {} y: {}", gridPos.x, gridPos.y);
+                        MapTile tile = level1.getTile(gridPos.x, gridPos.y);
+                        if (tile == MapTile::constructible) {
+                            spdlog::info("I can construct here");
+                            glm::vec2 winPos = level1.gridToWindow(gridPos.x, gridPos.y);
+                            Entity* myNewEntity = new Entity(winPos.x, winPos.y);
+                            entities.push_back(myNewEntity);
+                        } else {
+                            spdlog::warn("can't construct here");
+                        }
+                    }
                     break;
 
                 case SDL_KEYDOWN:

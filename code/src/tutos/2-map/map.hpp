@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "core/debug-draw.hpp"
 
-enum mapTile { constructible = 0, path = 1, locked = 2 };
+enum class MapTile { constructible = 0, path = 1, locked = 2 };
 
 class Map {
 public:
@@ -13,12 +13,12 @@ public:
 
     glm::vec2 windowToGrid(float x, float y);
     glm::vec2 gridToWindow(unsigned int x, unsigned int y);
-    mapTile getTile(unsigned int x, unsigned int y);
+    MapTile getTile(unsigned int x, unsigned int y);
 
     void draw();
 
 private:
-    std::vector<mapTile> m_grid;
+    std::vector<MapTile> m_grid;
     unsigned int m_tileSize;
     unsigned int m_gridWidth;
     unsigned int m_gridHeight;
