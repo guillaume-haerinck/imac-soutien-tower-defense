@@ -1,1 +1,5 @@
-http://gameprogrammingpatterns.com/spatial-partition.html - Grid
+# Tiling
+
+https://stackoverflow.com/questions/5731863/mapping-a-numeric-range-onto-another
+http://www.sdltutorials.com/sdl-maps
+http://gameprogrammingpatterns.com/spatial-partition.html

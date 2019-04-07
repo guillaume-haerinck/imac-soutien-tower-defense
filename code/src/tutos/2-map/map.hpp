@@ -12,6 +12,9 @@ public:
 
     glm::vec2 windowToGrid(float x, float y);
     glm::vec2 gridToWindow(unsigned int x, unsigned int y);
+    mapTile getTile(unsigned int x, unsigned int y);
+
+    void draw();
 
 private:
     std::vector<mapTile> m_grid;

@@ -1,50 +1,219 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>IMAC Soutien tower defense</title>
+<!-- browser-sync start --server --files "index.html" -->
 
-		<link rel="icon" href="slides/favicon.ico" />
-		<link rel="stylesheet" href="slides/css/reset.css">
-		<link rel="stylesheet" href="slides/css/reveal.css">
-		<link rel="stylesheet" href="slides/css/theme/black.css">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="slides/lib/css/monokai.css">
+	<title>IMAC Soutien tower defense</title>
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'slides/css/print/pdf.css' : 'slides/css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
+	<link rel="icon" href="slides/favicon.ico" />
+	<link rel="stylesheet" href="slides/css/reset.css">
+	<link rel="stylesheet" href="slides/css/reveal.css">
+	<link rel="stylesheet" href="slides/css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="slides/lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'slides/css/print/pdf.css' : 'slides/css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-image="https://www.leopoldmuseum.org/media/image/c950x576/4079.jpg">
+				<h1>Coder un Tower Defense</h1>
+				<small>(Utilisez les flèches pour naviguer)</small>
+			</section>
+
+			<section>
+				<h3>Programme</h3>
+				<ol>
+					<li>Théorie du jeu & Archi. logicielle <small>(25')</small></li>
+					<br>
+					<li>Codage des tuto 1 & 2 <small>(1h)</small></li>
+					<br>
+					<li>Rendre votre jeu cool <small>(45')</small></li>
+				</ol>
+			</section>
+
+			<section>
+				<section>
+					<h3>I - Comment développer jeu ?</h3>
+					<ul>
+						<li class='fragment'>Avoir un but</li>
+						<small class='fragment'>Au hasard : "défendre sa base contre des vagues d'ennemis"</small>
+						<li class='fragment'>Penser aux interactions </li>
+						<small class='fragment'>Genre : "placer des tours au sol"</small>
+						<li class='fragment'>Savoir ce qu'on fait de sa caméra</li>
+						<small class='fragment'>Vu l'avez vu venir : "vue du dessus"</small>
+					</ul>
+				</section>
+	
+				<section>
+					<h3>Exemple : Pacman</h3>
+					<div>
+						<img src="slides/img/pacman-core.gif">
+					</div>
+				</section>
+
+				<section data-background-image="slides/img/game-mechanics.png" data-background-size="contain">
+				</section>
+
+				<section>
+					<h3>Et après pas mal d'iterations, on fixe les règles</h3>
+					<div>
+						<img src="slides/img/pacman-rules.jpg">
+					</div>
+					<small>(Ça se fait progressivement en jouant au prototype)</small>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3>Ok, mais comment développer un jeu ??</h3>
+					<p class='fragment'>Ça arrive, mais on vas y aller par étape</p>
+				</section>
+
+				<section>
+					<table>
+						<tbody>
+							<tr>
+								<td><h3>Un moteur de jeu</h3></td>
+								<td></td>
+								<td><h3>Un jeu</h3></td>
+							</tr>
+							<tr>
+								<td><img src="slides/img/unreal-engine.gif" style="height: 250px;"></td>
+								<td style="vertical-align: middle;"><img src="slides/img/arrow.png" style="width: 80px; border: none; box-shadow: none;"></td>
+								<td><img src="slides/img/unreal-engine-game.gif" style="height: 250px;"></td>
+							</tr>
+							<tr>
+								<td class='fragment'>Sans moteur</td>
+								<td></td>
+								<td class='fragment'>Y'a pas de jeu</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section data-background-image="slides/img/game-engines.png">
+					<h3 style="color: white;
+					text-shadow:
+					-1.5px -1.5px 0 rgb(0, 0, 0),  
+					 1.5px -1.5px 0 rgb(0, 0, 0),  
+					 -1.5px 1.5px 0 rgb(0, 0, 0),  
+					  1.5px 1.5px 0 rgb(0, 0, 0)">Il existe de nombreux moteurs de jeux<br>(Mais on peut pas s'en servir pour le projet)</h3>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3>II - Comment développer un moteur de jeu ?</h3>
+					<ol>
+						<div class='fragment'>
+							<li>Pleurer</li>
+							<img style="height: 100px" src="slides/img/sad.gif">
+						</div>
+						<div class='fragment'>
+							<li>Sécher ses larmes et réfléchir</li>
+							<img style="height: 100px" src="slides/img/think.jpg">
+						</div>
+					</ol>
+				</section>
+
+				<section>
+					<p>Déja, le moteur n'a pas a être réutilisable</p>
+					<img src="slides/img/game-engine-abstraction.png">
+					<p class='fragment'>Ce qui signifie que sur un moteur de jeu complet...</p>
+				</section>
+
+				<section data-background-image="slides/img/game-engine-architecture-1.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/game-engine-architecture-2.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/game-engine-architecture-3.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/game-engine-architecture-4.png" data-background-size="contain">
+				</section>
+
+				<section data-background-image="slides/img/game-engine-architecture-5.png" data-background-size="contain">
+				</section>
+
+				<section>
+					<p>Au final, ce qu'il nous reste à découvrir, c'est le gameplay et le principe de systèmes</p>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3>III - Structure du projet tower defense</h3>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<p>Sous-section</p>
+				</section>
+
+				<section>
+					<h3>Ma section</h3>
+					<pre><code data-trim data-noescape>
+						#include "test"
+
+						int main() {
+							int test = "hello";
+						}
+					</code></pre>
+				</section>
+			</section>
+
+			<section>
+				<ul>
+					<li class='fragment'> Fact: Computer graphics are awesome </li>
+					<li class='fragment'> Fact: OpenGL is a mess (of user friendliness) </li>
+					<li class='fragment'> Fact: Blender is mostly a black box </li>
+					<br>
+					<li class='fragment'> my own opinion: you can never fully understand something which you have
+						never made yourself </li>
+					<br>
+					<li class='fragment'> consequence: one should develop one's own renderer </li>
+					<br>
+					<li class='fragment'> this course wants to be the next best thing </li>
+				</ul>
+			</section>
 		</div>
+	</div>
 
-		<script src="slides/js/reveal.js"></script>
+	<script src="slides/js/reveal.js"></script>
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'slides/plugin/markdown/marked.js' },
-					{ src: 'slides/plugin/markdown/markdown.js' },
-					{ src: 'slides/plugin/notes/notes.js', async: true },
-					{ src: 'slides/plugin/highlight/highlight.js', async: true }
-				]
-			});
-		</script>
-	</body>
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			hash: true,
+			center: true,
+			dependencies: [
+				{ src: 'slides/plugin/markdown/marked.js' },
+				{ src: 'slides/plugin/markdown/markdown.js' },
+				{ src: 'slides/plugin/notes/notes.js', async: true },
+				{ src: 'slides/plugin/highlight/highlight.js', async: true }
+			]
+		});
+	</script>
+</body>
+
 </html>
