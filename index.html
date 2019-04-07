@@ -333,30 +333,141 @@
 			<section>
 				<section>
 					<h3>I - Entity</h3>
-					<p>On vas créer une nouvelle classe entité</p>
-					<pre><code data-trim data-noescape>
-						#include "test"
+					<p>On vas créer une classe Entity</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						class Entity {
+							public:
+								Entity(float x, float y);
+								~Entity();
+							
+								void update();
+							
+							private:
+								float m_x;
+								float m_y;
+						};
+					</code></pre>
+				</section>
 
-						int main() {
-							int test = "hello";
+				<section>
+					<p>Dans update, on dessine un point à la position indiquée</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						void Entity::update() {
+							glColor4f(255, 0, 0, 1);
+							glPointSize(5.0f);
+							glBegin(GL_POINTS);
+								glVertex2f(m_x, m_y);
+							glEnd();
+							glPointSize(1.0f);
 						}
 					</code></pre>
 				</section>
-			</section>
 
-			<section>
-				<ul>
-					<li class='fragment'> Fact: Computer graphics are awesome </li>
-					<li class='fragment'> Fact: OpenGL is a mess (of user friendliness) </li>
-					<li class='fragment'> Fact: Blender is mostly a black box </li>
-					<br>
-					<li class='fragment'> my own opinion: you can never fully understand something which you have
-						never made yourself </li>
-					<br>
-					<li class='fragment'> consequence: one should develop one's own renderer </li>
-					<br>
-					<li class='fragment'> this course wants to be the next best thing </li>
-				</ul>
+				<section>
+					<p>Et dans le main, on stocke les nouvelles entités dans un tableau dynamique</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						/* Creation d'une entité au runtime */
+						Entity* myEntity1 = new Entity(0.0f, 0.0f);
+					
+						/* Tableau dynamique des entités vivantes du jeu */
+						std::vector<Entity*> entities;
+						entities.push_back(myEntity1);
+
+						(...)
+
+						/* Avant de quitter le main, on supprime tout */
+						for (Entity* entity : entities) {
+							delete entity;
+						}
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Maintenant, on peut les afficher au clic</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						/* On passe des coordonnées normalisées à celles de la fenêtre */
+						glMatrixMode(GL_PROJECTION);
+						glLoadIdentity();
+						gluOrtho2D(0, SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h, 0);
+
+						(...)
+
+						// On update dans la Game Loop
+						for (Entity* entity : entities) {
+							entity->update();
+						}
+
+						(...)
+
+						/* Dans les Events, Création d'une nouvelle entité au clic. */
+						case SDL_MOUSEBUTTONUP:
+						{
+							
+							Entity* myNewEntity = new Entity((float) e.button.x, (float) e.button.y);
+							entities.push_back(myNewEntity);
+						}
+						break;
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Super, on viens de refaire le 1er TD d'openGL quoi...</p>
+					<img src="slides/img/bored.gif">
+					<p class='fragment'>Ouaip, mais avec ça on peut faire plein d'autres trucs</p>
+				</section>
+
+				<section>
+					<p>Déja, t'as le droit de vie et de mort sur tes entités, dans l'ordre que tu veux.</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						/* Dans events */
+						if (entities.size() > 0 && e.key.keysym.sym == 'd') {
+							/* Delete the last entity on the list */
+							Entity* myEntityToDelete = entities.at(entities.size() - 1);
+							delete myEntityToDelete;
+							entities.erase(entities.end() - 1);
+						}
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Et surtout, tu peux les faire spawner par vague</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						bool prepareWave = false;
+						while (loop) {
+							loopCount++;
+
+							/* Création de 2 entités 3 secondes après avoir activé prepareWave */
+							if (loopCount == 60 * 1 && prepareWave) {
+								printf("1 seconde...\n");
+							} else if (loopCount == 60 * 2 && prepareWave) {
+								printf("2 secondes ...\n");
+							} else if (loopCount == 60 * 3 && prepareWave) {
+								printf("3 secondes ecoulees\n");
+								Entity* myNewEntity = new Entity(50., 50.);
+								Entity* myNewEntity2 = new Entity(60., 60.);
+								entities.push_back(myNewEntity);
+								entities.push_back(myNewEntity2);
+								loopCount = 0;
+								prepareWave = false;
+							}
+
+							(...)
+
+							/* Dans les events */
+							if (e.key.keysym.sym == 'w') {
+								printf("New wave in 3 seconds\n");
+								prepareWave = true;
+								loopCount = 0;
+							}
+							break;
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Et on pourrait aussi intégrer un système d'argent, d'upgrade, etc.. Mais vous avez compris l'idée.</p>
+					<p class='fragment'>Ce qui nous intéresse maintenant, c'est de bloquer la création d'entité à des endroits de l'écran.</p>
+					<h3 class='fragment'>GO TUTO 2</h3>
+				</section>
 			</section>
 		</div>
 	</div>
