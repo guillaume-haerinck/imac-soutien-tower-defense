@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <glm/glm.hpp>
+#include "core/debug-draw.hpp"
 
 enum mapTile { constructible = 0, path = 1, locked = 2 };
 
@@ -21,4 +22,5 @@ private:
     unsigned int m_tileSize;
     unsigned int m_gridWidth;
     unsigned int m_gridHeight;
+    DebugDraw m_dd;
 };

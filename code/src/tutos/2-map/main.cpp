@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
         Uint32 startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
 
+        level1.draw();
         /* Update des entités */
         for (Entity* entity : entities) {
             entity->update();
