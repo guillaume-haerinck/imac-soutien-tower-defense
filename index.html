@@ -469,6 +469,78 @@
 					<h3 class='fragment'>GO TUTO 2</h3>
 				</section>
 			</section>
+
+			<section>
+				<section>
+					<h3>Conseils avant le tuto 2</h3>
+					<ul>
+						<li>Principe du KISS<span class="fragment"> (Keep it simple silly)</span></li>
+						<li class="fragment">Expérimenter sur d'autres petits projets</li>
+						<li class="fragment">Faut savoir ce que l'on fait pour abstraire</li>
+						<li class="fragment">C'est normal de réfractorer son code</li>
+					</ul>
+				</section>
+	
+				<section>
+					<img src="slides/img/code-quality.jpg">
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3>II - Map</h3>
+					<p>On vas créer une classe Map</p>
+					<pre class='fragment'><code data-trim data-noescape>
+					#pragma once
+
+					#include "vector"
+					#include "glm/glm.hpp"
+					
+					enum mapTile { constructible = 0, path = 1, locked = 2 };
+					
+					class Map {
+					public:
+						Map();
+						~Map();
+					
+						glm::vec2 windowToGrid(float x, float y);
+						glm::vec2 gridToWindow(unsigned int x, unsigned int y);
+						mapTile getTile(unsigned int x, unsigned int y);
+					
+						void draw();
+					
+					private:
+						std::vector<mapTile> m_grid;
+						unsigned int m_tileSize;
+						unsigned int m_gridWidth;
+						unsigned int m_gridHeight;
+					};							
+					</code></pre>
+				</section>
+				
+				<section>
+					<p>La difficulté réside dans la transformation des coordonnées</p>
+					<pre class='fragment'><code data-trim data-noescape>
+						Map::Map() : m_tileSize(100)
+						{
+							m_gridWidth = WINDOW_WIDTH / m_tileSize;
+							m_gridHeight = WINDOW_HEIGHT / m_tileSize;
+						}
+						
+						glm::vec2 Map::windowToGrid(float x, float y) {
+							unsigned int tileX = x / WINDOW_WIDTH * m_gridWidth;
+							unsigned int tileY = y / WINDOW_HEIGHT * m_gridHeight;
+							return glm::vec2(tileX, tileY);
+						}
+						
+						glm::vec2 Map::gridToWindow(unsigned int x, unsigned int y) {
+							float posX = x / m_gridWidth * WINDOW_WIDTH + m_tileSize / 2;
+							float posY = y / m_gridHeight * WINDOW_HEIGHT + m_tileSize / 2;
+							return glm::vec2(posX, posY);
+						}						
+					</code></pre>
+				</section>
+			</section>
 		</div>
 	</div>
 
