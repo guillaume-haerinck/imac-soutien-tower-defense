@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     // Passage des coordonnées normalisés d'OpenGL aux coordonées de la fenetre (0,0) est maintenant en haut à gauche
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h, 0);
+    gluOrtho2D(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
     /* Creation d'une entité au runtime */
     Entity* myEntity1 = new Entity(0.0f, 0.0f);

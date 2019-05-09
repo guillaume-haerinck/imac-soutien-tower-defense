@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h, 0);
+    gluOrtho2D(0, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
     // Entities
     std::vector<Entity*> entities;
